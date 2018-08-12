@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 - Function to format RUT
 
+## [1.1.0] - 2018-08-12
+### Changed
+- get_verification_digit function can return capital K depending on the input flag
+
 ## [1.0.0] - 2018-08-11
 ### Added
 - rut_chile module

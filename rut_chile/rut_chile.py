@@ -30,7 +30,7 @@ def get_verification_digit(rut: str, capitalize: bool = False) -> str:
         exception
 
         capitalize {bool} -- Indicates if returned value must be a capital
-        letter. False by default
+        letter (default: {False})
 
     Returns:
         str -- Verification digit. It might be a digit, 'k' or 'K'.
@@ -53,6 +53,39 @@ def get_verification_digit(rut: str, capitalize: bool = False) -> str:
     return str(verification_digit)
 
 
+def format_rut(rut: str, with_dots: bool = False, upper: bool = True) -> str:
+    """Formats RUT according to the options
+
+    Arguments:
+        rut {str} -- RUT to be formatted
+
+    Keyword Arguments:
+        with_dots {bool} -- Indicates whether to add dot separators
+        (default: {False})
+        upper {bool} -- Indicates if result should be in uppercase
+        (default: {True})
+
+    Returns:
+        str -- Formatted RUT. If input is not valid, returns None
+    """
+
+    if not rut or not __is_well_formatted(rut):
+        return None
+    rut = __clean_rut(rut)
+
+    if with_dots:  # Add dots
+        formatted_rut = __add_thousands_separator(rut[:-1])
+    else:
+        formatted_rut = rut[:-1]
+
+    formatted_rut = '-'.join([formatted_rut, rut[-1]])  # Add dash
+
+    if upper:
+        formatted_rut = formatted_rut.upper()
+
+    return formatted_rut
+
+
 def __is_well_formatted(rut: str) -> bool:
     if not rut:
         raise ValueError("rut cannot be None")
@@ -64,3 +97,16 @@ def __clean_rut(rut: str) -> bool:
     if not rut or not __is_well_formatted(rut):
         raise ValueError("rut must be well formatted")
     return rut.replace(".", "").replace("-", "").lower()  # Standardize input
+
+
+def __add_thousands_separator(rut: str) -> str:
+    if len(rut) < 4:
+        return rut
+
+    digit_groups = []
+    if len(rut) % 3 > 0:  # Most significant group of digits
+        digit_groups.append(rut[:len(rut) % 3])
+    for i in range(int(len(rut) / 3)):  # Generate 3-digit groups
+        start = len(rut) % 3 + 3 * i
+        digit_groups.append(rut[start:start + 3])
+    return ".".join(digit_groups)

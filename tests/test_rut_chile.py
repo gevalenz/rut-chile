@@ -78,9 +78,7 @@ class TestGetVerificationDigit:
         ("12.312-K"),
     ])
     def test_invalid_argument(self, test_input):
-        with pytest.raises(Exception) as excinfo:
-            rut_chile.get_verification_digit(test_input)
-        assert str(excinfo.value) == 'Invalid input'
+        assert rut_chile.get_verification_digit(test_input) is None
 
     @pytest.mark.parametrize("test_input, upper, expected", [
         ("0", False, "0"),

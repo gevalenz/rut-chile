@@ -15,11 +15,9 @@ def is_valid_rut(rut: str) -> bool:
         bool -- True if rut is valid. False otherwise
     """
 
-    format_regex = r"^((\d{1,3}(\.\d{3})+-)|\d+-?)(\d|k|K)$"  # Valid format
-    if not rut or not re.match(format_regex, rut):
+    if not rut or not __is_well_formatted(rut):
         return False
-
-    rut = rut.replace(".", "").replace("-", "").lower()  # Standardize input
+    rut = __clean_rut(rut)
     return get_verification_digit(rut[:-1]) == rut[-1]
 
 
@@ -39,8 +37,7 @@ def get_verification_digit(rut: str, capitalize: bool = False) -> str:
     """
     format_regex = r"^\d+$"  # Regex to check valid format
     if not rut or not re.match(format_regex, rut):
-        raise Exception("Invalid input")
-
+        return None
     factors = [2, 3, 4, 5, 6, 7]  # Factors for calculating verification digit
     partial_sum = 0
     factor_pos = 0
@@ -54,3 +51,16 @@ def get_verification_digit(rut: str, capitalize: bool = False) -> str:
             return "K"
         return "k"
     return str(verification_digit)
+
+
+def __is_well_formatted(rut: str) -> bool:
+    if not rut:
+        raise ValueError("rut cannot be None")
+    format_regex = r"^((\d{1,3}(\.\d{3})+-)|\d+-?)(\d|k|K)$"  # Valid format
+    return re.match(format_regex, rut) is not None
+
+
+def __clean_rut(rut: str) -> bool:
+    if not rut or not __is_well_formatted(rut):
+        raise ValueError("rut must be well formatted")
+    return rut.replace(".", "").replace("-", "").lower()  # Standardize input

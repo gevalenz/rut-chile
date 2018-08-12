@@ -5,7 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Function to format RUT
+
+## [1.2.0] - 2018-08-12
+### Added
+- format_rut funtion to get a well formatted RUT
+### Changed
+- functions return None when input is invalid
 
 ## [1.1.0] - 2018-08-12
 ### Changed

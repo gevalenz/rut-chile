@@ -78,9 +78,7 @@ class TestGetVerificationDigit:
         ("12.312-K"),
     ])
     def test_invalid_argument(self, test_input):
-        with pytest.raises(Exception) as excinfo:
-            rut_chile.get_verification_digit(test_input)
-        assert str(excinfo.value) == 'Invalid input'
+        assert rut_chile.get_verification_digit(test_input) is None
 
     @pytest.mark.parametrize("test_input, upper, expected", [
         ("0", False, "0"),
@@ -100,3 +98,36 @@ class TestGetVerificationDigit:
     ])
     def test_valid_rut(self, test_input, upper, expected):
         assert rut_chile.get_verification_digit(test_input, upper) == expected
+
+
+class TestFormatRut:
+    @pytest.mark.parametrize("test_input", [
+        (None),
+        (""),
+        (" "),
+        ("k"),
+        ("ab"),
+        ("*"),
+        ("1-"),
+        (".-"),
+        ("1."),
+        ("1.11")
+    ])
+    def test_invalid_argument(self, test_input):
+        assert rut_chile.format_rut(test_input) is None
+
+    @pytest.mark.parametrize("test_input, with_dots, upper, expected", [
+        ("12", False, False, "1-2"),
+        ("123", False, False, "12-3"),
+        ("1234", False, False, "123-4"),
+        ("12345", False, False, "1234-5"),
+        ("12345", True, False, "1.234-5"),
+        ("123456", True, False, "12.345-6"),
+        ("1234567", True, False, "123.456-7"),
+        ("12345678", True, False, "1.234.567-8"),
+        ("123456789", True, False, "12.345.678-9"),
+        ("123456789k", True, False, "123.456.789-k"),
+        ("123456789k", True, True, "123.456.789-K"),
+    ])
+    def test_valid_rut(self, test_input, with_dots, upper, expected):
+        assert rut_chile.format_rut(test_input, with_dots, upper) == expected

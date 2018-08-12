@@ -23,7 +23,7 @@ def is_valid_rut(rut: str) -> bool:
     return get_verification_digit(rut[:-1]) == rut[-1]
 
 
-def get_verification_digit(rut: str) -> str:
+def get_verification_digit(rut: str, capitalize: bool = False) -> str:
     """Calculates the verification digit for a given rut
 
     Arguments:
@@ -31,8 +31,11 @@ def get_verification_digit(rut: str) -> str:
         digit allowed. If input is invalid, it raises and "Invalid input"
         exception
 
+        capitalize {bool} -- Indicates if returned value must be a capital
+        letter. False by default
+
     Returns:
-        str -- Verification digit. It might be a digit or 'k'.
+        str -- Verification digit. It might be a digit, 'k' or 'K'.
     """
     format_regex = r"^\d+$"  # Regex to check valid format
     if not rut or not re.match(format_regex, rut):
@@ -47,5 +50,7 @@ def get_verification_digit(rut: str) -> str:
 
     verification_digit = (11 - partial_sum % 11) % 11
     if verification_digit == 10:
+        if capitalize:
+            return "K"
         return "k"
     return str(verification_digit)

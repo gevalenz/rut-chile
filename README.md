@@ -48,4 +48,6 @@ rut_chile.get_verification_digit("9868503")
 # returns "0"
 rut_chile.get_verification_digit("12667869")
 # returns "k"
+rut_chile.get_verification_digit("12667869", True)
+# returns "K"
 ```

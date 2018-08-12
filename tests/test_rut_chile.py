@@ -82,20 +82,21 @@ class TestGetVerificationDigit:
             rut_chile.get_verification_digit(test_input)
         assert str(excinfo.value) == 'Invalid input'
 
-    @pytest.mark.parametrize("test_input, expected", [
-        ("0", "0"),
-        ("1", "9"),
-        ("9868503", "0"),
-        ("21518268", "1"),
-        ("17175325", "2"),
-        ("20930576", "3"),
-        ("13402128", "4"),
-        ("20737522", "5"),
-        ("6842256", "6"),
-        ("14983005", "7"),
-        ("20247667", "8"),
-        ("17832479", "9"),
-        ("12667869", "k")
+    @pytest.mark.parametrize("test_input, upper, expected", [
+        ("0", False, "0"),
+        ("1", False, "9"),
+        ("9868503", False, "0"),
+        ("21518268", False, "1"),
+        ("17175325", False, "2"),
+        ("20930576", False, "3"),
+        ("13402128", False, "4"),
+        ("20737522", False, "5"),
+        ("6842256", False, "6"),
+        ("14983005", False, "7"),
+        ("20247667", False, "8"),
+        ("17832479", False, "9"),
+        ("12667869", False, "k"),
+        ("12667869", True, "K")
     ])
-    def test_valid_rut(self, test_input, expected):
-        assert rut_chile.get_verification_digit(test_input) == expected
+    def test_valid_rut(self, test_input, upper, expected):
+        assert rut_chile.get_verification_digit(test_input, upper) == expected

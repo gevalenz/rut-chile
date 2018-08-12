@@ -1,0 +1,1 @@
+If you want to contribute, please make sure to install the dependencies in requirements.txt, check your code running the linter ``` flake8 . ```, and implement the respective unit tests. You can run the tests by executing the command ``` python -m pytest ```.

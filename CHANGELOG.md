@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 - Function to format RUT
 
-## [0.2.2] - 2018-08-11
+## [1.0.0] - 2018-08-11
 ### Added
 - rut_chile module
 - is_valid_rut function to check if a given RUT is valid

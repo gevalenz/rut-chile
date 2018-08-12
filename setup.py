@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rut_chile",
-    version="0.1.0",
+    version="0.2.0",
     author="Guillermo Valenzuela",
     author_email="gevalenz@gmail.com",
     description="Package for validating Chilean RUT",

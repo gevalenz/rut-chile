@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.2.0] - 2018-08-12
 ### Added
-- format_rut funtion to get a well formatted RUT
+- format_rut function to get a well formatted RUT
 ### Changed
 - functions return None when input is invalid
 

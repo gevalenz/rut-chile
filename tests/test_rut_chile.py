@@ -21,7 +21,9 @@ class TestIsValidRutTests:
         ("123.12-K", False)
     ])
     def test_invalid_argument(self, test_input, expected):
-        assert rut_chile.is_valid_rut(test_input) == expected
+        with pytest.raises(ValueError) as error:   
+            rut_chile.is_valid_rut(test_input)  
+        assert type(error.value) is ValueError
 
     @pytest.mark.parametrize("test_input, expected", [
         ("9868503-1", False),
@@ -78,7 +80,9 @@ class TestGetVerificationDigit:
         ("12.312-K"),
     ])
     def test_invalid_argument(self, test_input):
-        assert rut_chile.get_verification_digit(test_input) is None
+        with pytest.raises(ValueError) as error:   
+            rut_chile.get_verification_digit(test_input)  
+        assert type(error.value) is ValueError
 
     @pytest.mark.parametrize("test_input, upper, expected", [
         ("0", False, "0"),
@@ -114,7 +118,9 @@ class TestFormatRut:
         ("1.11")
     ])
     def test_invalid_argument(self, test_input):
-        assert rut_chile.format_rut(test_input) is None
+        with pytest.raises(ValueError) as error:
+            rut_chile.format_rut(test_input)
+        assert type(error.value) is ValueError
 
     @pytest.mark.parametrize("test_input, with_dots, upper, expected", [
         ("12", False, False, "1-2"),

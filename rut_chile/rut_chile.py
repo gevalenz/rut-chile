@@ -15,8 +15,8 @@ def is_valid_rut(rut: str) -> bool:
         bool -- True if rut is valid. False otherwise
     """
 
-    if not rut or not __is_well_formatted(rut):
-        return False
+    if not __is_rut_input_valid(rut):
+        raise ValueError("invalid input")
     rut = __clean_rut(rut)
     return get_verification_digit(rut[:-1]) == rut[-1]
 
@@ -26,7 +26,7 @@ def get_verification_digit(rut: str, capitalize: bool = False) -> str:
 
     Arguments:
         rut {str} -- Rut containing digits only. No dots nor verification
-        digit allowed. If input is invalid, it raises and "Invalid input"
+        digit allowed. If input is invalid, it raises and "ValueError"
         exception
 
         capitalize {bool} -- Indicates if returned value must be a capital
@@ -35,21 +35,11 @@ def get_verification_digit(rut: str, capitalize: bool = False) -> str:
     Returns:
         str -- Verification digit. It might be a digit, 'k' or 'K'.
     """
-    format_regex = r"^\d+$"  # Regex to check valid format
-    if not rut or not re.match(format_regex, rut):
-        return None
-    factors = [2, 3, 4, 5, 6, 7]  # Factors for calculating verification digit
-    partial_sum = 0
-    factor_pos = 0
-    for digit in reversed(rut):
-        partial_sum += int(digit) * factors[factor_pos]
-        factor_pos = (factor_pos + 1) % 6
+    if not __is_rut_format_valid_to_get_verification_digit(rut):
+        raise ValueError("invalid input")
 
-    verification_digit = (11 - partial_sum % 11) % 11
-    if verification_digit == 10:
-        if capitalize:
-            return "K"
-        return "k"
+    partial_sum = __get_partial_sum_for_verification_digit_computation(rut)
+    verification_digit = __get_verification_digit_from_partial_sum(partial_sum, capitalize)
     return str(verification_digit)
 
 
@@ -69,16 +59,16 @@ def format_rut(rut: str, with_dots: bool = False, upper: bool = True) -> str:
         str -- Formatted RUT. If input is not valid, returns None
     """
 
-    if not rut or not __is_well_formatted(rut):
-        return None
+    if not __is_rut_input_valid(rut):
+        raise ValueError("invalid input")
     rut = __clean_rut(rut)
 
-    if with_dots:  # Add dots
+    if with_dots:
         formatted_rut = __add_thousands_separator(rut[:-1])
     else:
         formatted_rut = rut[:-1]
 
-    formatted_rut = '-'.join([formatted_rut, rut[-1]])  # Add dash
+    formatted_rut = '-'.join([formatted_rut, rut[-1]])
 
     if upper:
         formatted_rut = formatted_rut.upper()
@@ -86,16 +76,40 @@ def format_rut(rut: str, with_dots: bool = False, upper: bool = True) -> str:
     return formatted_rut
 
 
+def __is_rut_input_valid(rut: str) -> bool:
+    return rut and __is_well_formatted(rut)
+
+
 def __is_well_formatted(rut: str) -> bool:
-    if not rut:
-        raise ValueError("rut cannot be None")
     format_regex = r"^((\d{1,3}(\.\d{3})+-)|\d+-?)(\d|k|K)$"  # Valid format
     return re.match(format_regex, rut) is not None
 
 
+def __is_rut_format_valid_to_get_verification_digit(rut: str) -> bool:
+    format_regex = r"^\d+$"
+    return rut and re.match(format_regex, rut)
+
+
+def __get_partial_sum_for_verification_digit_computation(rut: str) -> int:
+    factors = [2, 3, 4, 5, 6, 7]  # Factors for calculating verification digit
+    partial_sum = 0
+    factor_pos = 0
+    for digit in reversed(rut):
+        partial_sum += int(digit) * factors[factor_pos]
+        factor_pos = (factor_pos + 1) % 6
+    return partial_sum
+
+
+def __get_verification_digit_from_partial_sum(partial_sum: int, capitalize: bool) -> str:
+    verification_digit = (11 - partial_sum % 11) % 11
+    if verification_digit == 10:
+        if capitalize:
+            return "K"
+        return "k"
+    return verification_digit
+
+
 def __clean_rut(rut: str) -> bool:
-    if not rut or not __is_well_formatted(rut):
-        raise ValueError("rut must be well formatted")
     return rut.replace(".", "").replace("-", "").lower()  # Standardize input
 
 

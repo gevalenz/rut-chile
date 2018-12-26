@@ -48,7 +48,7 @@ rut_chile.get_verification_digit("9868503")
 # returns "0"
 rut_chile.get_verification_digit("12667869")
 # returns "k"
-rut_chile.get_verification_digit("12667869", True)
+rut_chile.get_capitalized_verification_digit("12667869")
 # returns "K"
 ```
 
@@ -57,12 +57,12 @@ rut_chile.get_verification_digit("12667869", True)
 ```
 import rut_chile
 
-rut_chile.format_rut("98685030")
-# returns "9.868.503-0"
-rut_chile.format_rut("98685030", with_dots=False)
-# returns "9868503-0"
-rut_chile.format_rut("12667869k")
-# returns "12.667.869-K"
-rut_chile.format_rut("12667869k", upper=False)
+rut_chile.format_rut_with_dots("12667869k")
 # returns "12.667.869-k"
+rut_chile.format_rut_without_dots("12667869k")
+# returns "12667869-k"
+rut_chile.format_capitalized_rut_without_dots("12667869k")
+# returns "12667869-K"
+rut_chile.format_capitalized_rut_with_dots("12667869k")
+# returns "12.667.869-K"
 ```

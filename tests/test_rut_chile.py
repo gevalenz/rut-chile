@@ -4,28 +4,28 @@ from rut_chile import rut_chile
 
 class TestIsValidRutTests:
 
-    @pytest.mark.parametrize("test_input, expected", [
-        (None, False),
-        ("", False),
-        (" ", False),
-        ("k", False),
-        ("1", False),
-        ("*", False),
-        ("1-", False),
-        (".-", False),
-        ("1.", False),
-        ("1.11", False),
-        ("1.111K", False),
-        (".1", False),
-        ("123.K", False),
-        ("123.12-K", False)
+    @pytest.mark.parametrize("test_input, expected_value", [
+        (None, ValueError),
+        ("", ValueError),
+        (" ", ValueError),
+        ("k", ValueError),
+        ("1", ValueError),
+        ("*", ValueError),
+        ("1-", ValueError),
+        (".-", ValueError),
+        ("1.", ValueError),
+        ("1.11", ValueError),
+        ("1.111K", ValueError),
+        (".1", ValueError),
+        ("123.K", ValueError),
+        ("123.12-K", ValueError)
     ])
-    def test_invalid_argument(self, test_input, expected):
-        with pytest.raises(ValueError) as error:   
-            rut_chile.is_valid_rut(test_input)  
-        assert type(error.value) is ValueError
+    def test_invalid_argument(self, test_input, expected_value):
+        with pytest.raises(ValueError) as error:
+            rut_chile.is_valid_rut(test_input)
+        assert type(error.value) is expected_value
 
-    @pytest.mark.parametrize("test_input, expected", [
+    @pytest.mark.parametrize("test_input, expected_value", [
         ("9868503-1", False),
         ("21518268-2", False),
         ("17175325-3", False),
@@ -38,10 +38,10 @@ class TestIsValidRutTests:
         ("17832479-k", False),
         ("12667869-0", False)
     ])
-    def test_invalid_rut(self, test_input, expected):
-        assert rut_chile.is_valid_rut(test_input) == expected
+    def test_invalid_rut(self, test_input, expected_value):
+        assert rut_chile.is_valid_rut(test_input) == expected_value
 
-    @pytest.mark.parametrize("test_input, expected", [
+    @pytest.mark.parametrize("test_input, expected_value", [
         ("00", True),
         ("0-0", True),
         ("1-9", True),
@@ -62,78 +62,214 @@ class TestIsValidRutTests:
         ("12.667.869-K", True),
         ("12.667.869-k", True)
     ])
-    def test_valid_rut(self, test_input, expected):
-        assert rut_chile.is_valid_rut(test_input) == expected
+    def test_valid_rut(self, test_input, expected_value):
+        assert rut_chile.is_valid_rut(test_input) == expected_value
 
 
 class TestGetVerificationDigit:
-    @pytest.mark.parametrize("test_input", [
-        (None),
-        (""),
-        (" "),
-        ("k"),
-        ("1k"),
-        ("*"),
-        ("1-"),
-        (".-"),
-        ("12312-K"),
-        ("12.312-K"),
+    @pytest.mark.parametrize("test_input, expected_value", [
+        (None, ValueError),
+        ("", ValueError),
+        (" ", ValueError),
+        ("k", ValueError),
+        ("1k", ValueError),
+        ("*", ValueError),
+        ("1-", ValueError),
+        (".-", ValueError),
+        ("12312-K", ValueError),
+        ("12.312-K", ValueError),
     ])
-    def test_invalid_argument(self, test_input):
-        with pytest.raises(ValueError) as error:   
-            rut_chile.get_verification_digit(test_input)  
-        assert type(error.value) is ValueError
-
-    @pytest.mark.parametrize("test_input, upper, expected", [
-        ("0", False, "0"),
-        ("1", False, "9"),
-        ("9868503", False, "0"),
-        ("21518268", False, "1"),
-        ("17175325", False, "2"),
-        ("20930576", False, "3"),
-        ("13402128", False, "4"),
-        ("20737522", False, "5"),
-        ("6842256", False, "6"),
-        ("14983005", False, "7"),
-        ("20247667", False, "8"),
-        ("17832479", False, "9"),
-        ("12667869", False, "k"),
-        ("12667869", True, "K")
-    ])
-    def test_valid_rut(self, test_input, upper, expected):
-        assert rut_chile.get_verification_digit(test_input, upper) == expected
-
-
-class TestFormatRut:
-    @pytest.mark.parametrize("test_input", [
-        (None),
-        (""),
-        (" "),
-        ("k"),
-        ("ab"),
-        ("*"),
-        ("1-"),
-        (".-"),
-        ("1."),
-        ("1.11")
-    ])
-    def test_invalid_argument(self, test_input):
+    def test_invalid_argument(self, test_input, expected_value):
         with pytest.raises(ValueError) as error:
-            rut_chile.format_rut(test_input)
-        assert type(error.value) is ValueError
+            rut_chile.get_verification_digit(test_input)
+        assert type(error.value) is expected_value
 
-    @pytest.mark.parametrize("test_input, with_dots, upper, expected", [
-        ("12", False, False, "1-2"),
-        ("123", False, False, "12-3"),
-        ("1234", False, False, "123-4"),
-        ("12345", False, False, "1234-5"),
-        ("12345", True, False, "1.234-5"),
-        ("123456", True, False, "12.345-6"),
-        ("1234567", True, False, "123.456-7"),
-        ("12345678", True, False, "1.234.567-8"),
-        ("123456789", True, False, "12.345.678-9"),
-        ("123456789k", True, False, "123.456.789-k"),
-        ("123456789k", True, True, "123.456.789-K"),
+    @pytest.mark.parametrize("test_input, expected_value", [
+        ("0", "0"),
+        ("1", "9"),
+        ("9868503", "0"),
+        ("21518268", "1"),
+        ("17175325", "2"),
+        ("20930576", "3"),
+        ("13402128", "4"),
+        ("20737522", "5"),
+        ("6842256", "6"),
+        ("14983005", "7"),
+        ("20247667", "8"),
+        ("17832479", "9"),
+        ("12667869", "k")
     ])
-    def test_valid_rut(self, test_input, with_dots, upper, expected):
-        assert rut_chile.format_rut(test_input, with_dots, upper) == expected
+    def test_valid_rut(self, test_input, expected_value):
+        assert rut_chile.get_verification_digit(test_input) == expected_value
+
+
+class TestGetCapitalizedVerificationDigit:
+    @pytest.mark.parametrize("test_input, expected_value", [
+        (None, ValueError),
+        ("", ValueError),
+        (" ", ValueError),
+        ("k", ValueError),
+        ("1k", ValueError),
+        ("*", ValueError),
+        ("1-", ValueError),
+        (".-", ValueError),
+        ("12312-K", ValueError),
+        ("12.312-K", ValueError),
+    ])
+    def test_invalid_argument(self, test_input, expected_value):
+        with pytest.raises(ValueError) as error:
+            rut_chile.get_capitalized_verification_digit(test_input)
+        assert type(error.value) is expected_value
+
+    @pytest.mark.parametrize("test_input, expected_value", [
+        ("0", "0"),
+        ("1", "9"),
+        ("9868503", "0"),
+        ("21518268", "1"),
+        ("17175325", "2"),
+        ("20930576", "3"),
+        ("13402128", "4"),
+        ("20737522", "5"),
+        ("6842256", "6"),
+        ("14983005", "7"),
+        ("20247667", "8"),
+        ("17832479", "9"),
+        ("12667869", "K")
+    ])
+    def test_valid_rut(self, test_input, expected_value):
+        digit = rut_chile.get_capitalized_verification_digit(test_input)
+        assert digit == expected_value
+
+
+class TestFormatRutWithDots:
+    @pytest.mark.parametrize("test_input, expected_value", [
+        (None, ValueError),
+        ("", ValueError),
+        (" ", ValueError),
+        ("k", ValueError),
+        ("ab", ValueError),
+        ("*", ValueError),
+        ("1-", ValueError),
+        (".-", ValueError),
+        ("1.", ValueError),
+        ("1.11", ValueError)
+    ])
+    def test_invalid_argument(self, test_input, expected_value):
+        with pytest.raises(ValueError) as error:
+            rut_chile.format_rut_with_dots(test_input)
+        assert type(error.value) is expected_value
+
+    @pytest.mark.parametrize("test_input, expected_value", [
+        ("12", "1-2"),
+        ("123", "12-3"),
+        ("1234", "123-4"),
+        ("12345", "1.234-5"),
+        ("123456", "12.345-6"),
+        ("1234567", "123.456-7"),
+        ("12345678", "1.234.567-8"),
+        ("123456789", "12.345.678-9"),
+        ("123456789k", "123.456.789-k"),
+    ])
+    def test_valid_rut(self, test_input, expected_value):
+        assert rut_chile.format_rut_with_dots(test_input) == expected_value
+
+
+class TestFormatCapitalizedRutWithDots:
+    @pytest.mark.parametrize("test_input, expected_value", [
+        (None, ValueError),
+        ("", ValueError),
+        (" ", ValueError),
+        ("k", ValueError),
+        ("ab", ValueError),
+        ("*", ValueError),
+        ("1-", ValueError),
+        (".-", ValueError),
+        ("1.", ValueError),
+        ("1.11", ValueError)
+    ])
+    def test_invalid_argument(self, test_input, expected_value):
+        with pytest.raises(ValueError) as error:
+            rut_chile.format_capitalized_rut_with_dots(test_input)
+        assert type(error.value) is expected_value
+
+    @pytest.mark.parametrize("test_input, expected_value", [
+        ("12", "1-2"),
+        ("123", "12-3"),
+        ("1234", "123-4"),
+        ("12345", "1.234-5"),
+        ("123456", "12.345-6"),
+        ("1234567", "123.456-7"),
+        ("12345678", "1.234.567-8"),
+        ("123456789", "12.345.678-9"),
+        ("123456789k", "123.456.789-K"),
+    ])
+    def test_valid_rut(self, test_input, expected_value):
+        rut = rut_chile.format_capitalized_rut_with_dots(test_input)
+        assert rut == expected_value
+
+
+class TestFormatRutWithoutDots:
+    @pytest.mark.parametrize("test_input, expected_value", [
+        (None, ValueError),
+        ("", ValueError),
+        (" ", ValueError),
+        ("k", ValueError),
+        ("ab", ValueError),
+        ("*", ValueError),
+        ("1-", ValueError),
+        (".-", ValueError),
+        ("1.", ValueError),
+        ("1.11", ValueError)
+    ])
+    def test_invalid_argument(self, test_input, expected_value):
+        with pytest.raises(ValueError) as error:
+            rut_chile.format_rut_without_dots(test_input)
+        assert type(error.value) is expected_value
+
+    @pytest.mark.parametrize("test_input, expected_value", [
+        ("12", "1-2"),
+        ("123", "12-3"),
+        ("1234", "123-4"),
+        ("12345", "1234-5"),
+        ("123456", "12345-6"),
+        ("1234567", "123456-7"),
+        ("12345678", "1234567-8"),
+        ("123456789", "12345678-9"),
+        ("123456789k", "123456789-k"),
+    ])
+    def test_valid_rut(self, test_input, expected_value):
+        assert rut_chile.format_rut_without_dots(test_input) == expected_value
+
+
+class TestFormatCapitalizedRutWithoutDots:
+    @pytest.mark.parametrize("test_input, expected_value", [
+        (None, ValueError),
+        ("", ValueError),
+        (" ", ValueError),
+        ("k", ValueError),
+        ("ab", ValueError),
+        ("*", ValueError),
+        ("1-", ValueError),
+        (".-", ValueError),
+        ("1.", ValueError),
+        ("1.11", ValueError)
+    ])
+    def test_invalid_argument(self, test_input, expected_value):
+        with pytest.raises(ValueError) as error:
+            rut_chile.format_capitalized_rut_without_dots(test_input)
+        assert type(error.value) is expected_value
+
+    @pytest.mark.parametrize("test_input, expected_value", [
+        ("12", "1-2"),
+        ("123", "12-3"),
+        ("1234", "123-4"),
+        ("12345", "1234-5"),
+        ("123456", "12345-6"),
+        ("1234567", "123456-7"),
+        ("12345678", "1234567-8"),
+        ("123456789", "12345678-9"),
+        ("123456789k", "123456789-K"),
+    ])
+    def test_valid_rut(self, test_input, expected_value):
+        rut = rut_chile.format_capitalized_rut_without_dots(test_input)
+        assert rut == expected_value

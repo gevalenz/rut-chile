@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.0.0] - 2018-12-26
+### Added
+- format_rut function to get a well formatted RUT
+- get_capitalized_verification_digit to get capitalized verification digit
+- format_rut_with_dots to get RUT with thousands separator
+- format_capitalized_rut_with_dots to get RUT with thousands separator and capitalized
+- format_rut_without_dots to get RUT with dash only
+- format_capitalized_rut_without_dots to get RUT with dash only and capitalized
+### Changed
+- functions raise ValueError when input is invalid
+- get_verification_digit doesn't accept capitalize flag anymore
+- refactoring of code
+### Removed
+- format_rut removed and replaced
+
 ## [1.2.0] - 2018-08-12
 ### Added
 - format_rut function to get a well formatted RUT

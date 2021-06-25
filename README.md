@@ -17,7 +17,7 @@ python setup.py install
 # Usage
 ## Validate RUT
 ```
-import rut_chile
+from rut_chile import rut_chile
 
 rut_chile.is_valid_rut("12345678-9")
 # returns False
@@ -42,7 +42,7 @@ rut_chile.is_valid_rut("12.667.869-k")
 ## Get verification digit
 
 ```
-import rut_chile
+from rut_chile import rut_chile
 
 rut_chile.get_verification_digit("9868503")
 # returns "0"
@@ -55,7 +55,7 @@ rut_chile.get_capitalized_verification_digit("12667869")
 ## Format RUT
 
 ```
-import rut_chile
+from rut_chile import rut_chile
 
 rut_chile.format_rut_with_dots("12667869k")
 # returns "12.667.869-k"

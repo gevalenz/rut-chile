@@ -70,7 +70,7 @@ def format_rut_with_dots(rut: str) -> str:
     """
     __raise_error_if_rut_input_format_not_valid(rut)
     formatted_rut = __clean_rut(rut)
-    formatted_rut = __add_dash_to_rut(rut)
+    formatted_rut = __add_dash_to_rut(formatted_rut)
     base_rut = __add_thousands_separator(formatted_rut[:-2])
     return base_rut + formatted_rut[-2:]
 

@@ -169,6 +169,8 @@ class TestFormatRutWithDots:
         ("12345678", "1.234.567-8"),
         ("123456789", "12.345.678-9"),
         ("123456789k", "123.456.789-k"),
+        ("12.667.869-k", "12.667.869-k"),
+        ("12667869-k", "12.667.869-k"),
     ])
     def test_valid_rut(self, test_input, expected_value):
         assert rut_chile.format_rut_with_dots(test_input) == expected_value
@@ -202,6 +204,8 @@ class TestFormatCapitalizedRutWithDots:
         ("12345678", "1.234.567-8"),
         ("123456789", "12.345.678-9"),
         ("123456789k", "123.456.789-K"),
+        ("12.667.869-k", "12.667.869-K"),
+        ("12667869-k", "12.667.869-K"),
     ])
     def test_valid_rut(self, test_input, expected_value):
         rut = rut_chile.format_capitalized_rut_with_dots(test_input)
@@ -236,6 +240,8 @@ class TestFormatRutWithoutDots:
         ("12345678", "1234567-8"),
         ("123456789", "12345678-9"),
         ("123456789k", "123456789-k"),
+        ("12.667.869-k", "12667869-k"),
+        ("12667869-k", "12667869-k"),
     ])
     def test_valid_rut(self, test_input, expected_value):
         assert rut_chile.format_rut_without_dots(test_input) == expected_value
@@ -269,6 +275,8 @@ class TestFormatCapitalizedRutWithoutDots:
         ("12345678", "1234567-8"),
         ("123456789", "12345678-9"),
         ("123456789k", "123456789-K"),
+        ("12.667.869-k", "12667869-K"),
+        ("12667869-k", "12667869-K"),
     ])
     def test_valid_rut(self, test_input, expected_value):
         rut = rut_chile.format_capitalized_rut_without_dots(test_input)

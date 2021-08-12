@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.0.1] - 2021-08-12
+### Added
+- fixes rut formatting functions for inputs containing dash
+
 ## [2.0.0] - 2018-12-26
 ### Added
 - format_rut function to get a well formatted RUT
